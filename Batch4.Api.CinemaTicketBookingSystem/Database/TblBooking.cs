@@ -8,8 +8,7 @@ public class TblBooking
 {
     [Key]
     public int BookingId { get; set; }
-    public string BookingCode { get; set; }
-    public DateTime ShowTime {  get; set; }
     public string SeatMovieCode { get; set; }
-    public string CustomerCode { get; set; }
+    public string CustomerName { get; set; }
+    public DateTime BookingHistory { get; set; }
 }

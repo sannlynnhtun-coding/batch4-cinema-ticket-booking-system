@@ -8,7 +8,6 @@ public class TblShowTime
 {
     [Key]
     public int ShowtimeId { get; set; }
-    public string ShowtimeCode { get; set; }
+    public DateTime Showtime { get; set; }
     public string MovieCode { get; set; }
-    public DateTime MovieTime { get; set; }
 }
