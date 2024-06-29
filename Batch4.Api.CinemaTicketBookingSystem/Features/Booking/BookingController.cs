@@ -1,5 +1,11 @@
-﻿namespace Batch4.Api.CinemaTicketBookingSystem.Features.Booking;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-public class BookingController
+namespace Batch4.Api.CinemaTicketBookingSystem.Features.Booking
 {
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BookingController : ControllerBase
+    {
+    }
 }
