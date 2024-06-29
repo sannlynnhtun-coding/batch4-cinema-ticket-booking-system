@@ -1,5 +1,6 @@
 ﻿using Batch4.Api.CinemaTicketBookingSystem.Database;
 using Batch4.Api.CinemaTicketBookingSystem.Models.BookingModel;
+using Batch4.Api.CinemaTicketBookingSystem.Models.MovieModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Batch4.Api.CinemaTicketBookingSystem.Features.Booking;
