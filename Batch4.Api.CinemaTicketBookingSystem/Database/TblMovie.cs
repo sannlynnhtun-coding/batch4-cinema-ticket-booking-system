@@ -8,7 +8,7 @@ public class TblMovie
 {
     [Key]
     public int MovieId { get; set; }
-    public string MoiveCode { get; set; }
+    public string MovieCode { get; set; }
     public string MovieName { get; set; }
     public string Description { get; set; }
 }

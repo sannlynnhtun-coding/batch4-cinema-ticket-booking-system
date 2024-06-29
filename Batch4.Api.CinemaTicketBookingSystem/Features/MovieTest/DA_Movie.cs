@@ -19,7 +19,7 @@ public class DA_Movie
 
     public async Task<MovieList> GetList()
     {
-        string query = "SELECT MoveName,Description FROM Tbl_Movie;";
+        string query = "SELECT MovieName,Description FROM Tbl_Movie;";
         var lst = await _connection.QueryAsync<MovieResponseModel>(query);
         var model = new MovieList()
         {
