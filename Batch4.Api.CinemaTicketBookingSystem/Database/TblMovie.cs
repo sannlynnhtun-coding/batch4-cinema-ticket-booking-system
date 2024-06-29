@@ -12,3 +12,5 @@ public class TblMovie
     public string MovieName { get; set; }
     public string Description { get; set; }
 }
+
+
