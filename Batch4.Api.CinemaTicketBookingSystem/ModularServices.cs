@@ -1,4 +1,7 @@
 ﻿using Batch4.Api.CinemaTicketBookingSystem.Database;
+using Batch4.Api.CinemaTicketBookingSystem.Features.Booking;
+using Batch4.Api.CinemaTicketBookingSystem.Features.Movie;
+using Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -18,10 +21,16 @@ public static class ModularServices
 
     public static IServiceCollection AddDataAccess(this IServiceCollection services)
     {
+        services.AddScoped<DA_Booking>();
+        services.AddScoped<DA_Movie>();
+        services.AddScoped<DA_MovieDetailed>();
         return services;
     }
     public static IServiceCollection AddBusinessLogic(this IServiceCollection services)
     {
+        services.AddScoped<BL_Booking>();
+        services.AddScoped<BL_Movie>();
+        services.AddScoped<BL_MovieDetailed>();
         return services;
     }
 
