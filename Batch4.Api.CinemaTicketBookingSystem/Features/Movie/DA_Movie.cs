@@ -6,10 +6,12 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie;
 public class DA_Movie
 {
     private readonly AppDbContext _context;
-    public DA_Movie()
+
+    public DA_Movie(AppDbContext context)
     {
-        _context = new AppDbContext();
+        _context = context;
     }
+
     public List<TblMovie> GetMovies()
     {
         var list = _context.Movies.ToList();

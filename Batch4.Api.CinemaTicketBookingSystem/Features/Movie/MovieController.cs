@@ -9,9 +9,9 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie
     {
         private readonly BL_Movie _bL_Movie;
 
-        public MovieController()
+        public MovieController(BL_Movie bL_Movie)
         {
-            _bL_Movie = new BL_Movie();
+            _bL_Movie = bL_Movie;
         }
 
         [HttpGet]
