@@ -3,6 +3,7 @@ using Batch4.Api.CinemaTicketBookingSystem.Features.Booking;
 using Batch4.Api.CinemaTicketBookingSystem.Features.Movie;
 using Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
@@ -41,7 +42,7 @@ public static class ModularServices
         {
             opt.UseSqlServer(connectionString);
         }, ServiceLifetime.Transient, ServiceLifetime.Transient);
-        services.AddScoped<DbConnection>(n => new SqlConnection(connectionString));
+        builder.Services.AddScoped<IDbConnection>(n => new SqlConnection(connectionString));
         return services;
     }
 }
