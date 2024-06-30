@@ -26,7 +26,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
 
         public MovieDetailedResponseModel GetMovieDetailed(string movieCode)
         {
-            string query = @"SELECT m.MovieCode, m.MovieName, m.Description, sm.SeatMovieCode, st.ShowtimeCode, st.MovieTime
+            string query = @"SELECT m.MovieCode, m.MovieName, m.Description, sm.SeatMovieCode, st.Showtime
 FROM Tbl_Movie m
 INNER JOIN Tbl_SeatMovie sm ON m.MovieCode = sm.MovieCode
 INNER JOIN Tbl_ShowTime st ON m.MovieCode = st.MovieCode
