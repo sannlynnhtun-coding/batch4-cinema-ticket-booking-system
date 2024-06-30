@@ -11,16 +11,10 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
             _dA_MovieDetailed = dA_MovieDetailed;
         }
 
-        public List<DetailedSeatMovie> GetDetailedSeatMovie()
+        public async Task<MovieDetailResponseModel>GetMovieDetail(string movieCode)
         {
-            var lst = _dA_MovieDetailed.GetDetailedSeatMovie();
-            return lst;
-        }
-
-        public MovieDetailedResponseModel GetMovieDetailed(string movieCode)
-        {
-            var item = _dA_MovieDetailed.GetMovieDetailed(movieCode);
-            return item;
+            var model = await _dA_MovieDetailed.GetMovieDetail(movieCode);
+            return model;
         }
     }
 }
