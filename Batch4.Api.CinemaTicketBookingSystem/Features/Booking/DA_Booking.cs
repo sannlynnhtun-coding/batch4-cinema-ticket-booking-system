@@ -1,9 +1,9 @@
 ﻿using Batch4.Api.CinemaTicketBookingSystem.Database;
 using Batch4.Api.CinemaTicketBookingSystem.Models.BookingModel;
-using Batch4.Api.CinemaTicketBookingSystem.Models.MovieModel;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace Batch4.Api.CinemaTicketBookingSystem.Features.Booking;
 
@@ -20,7 +20,7 @@ public class DA_Booking
 
     public async Task<bool> IsExistSeatMovieCode(string seatMovieCode)
     {
-        var item = await _context.Bookings.FirstOrDefaultAsync(x =>
+        var item = await _context.SeatMovies.FirstOrDefaultAsync(x =>
             x.SeatMovieCode == seatMovieCode
         );
         if (item is null)
@@ -31,10 +31,7 @@ public class DA_Booking
 
     public async Task<string> CreateCustomer(string customerName)
     {
-        string query = @"INSERT INTO [dbo].[Tbl_Customer]
-           ,[CustomerName])
-     VALUES
-           (@CustomerName)";
+        string query = @"INSERT INTO Tbl_Customer (CustomerName) VALUES (@CustomerName)";
 
         int result = await _connection.ExecuteAsync(query, new
         {
@@ -63,7 +60,7 @@ public class DA_Booking
         var query = @"SELECT B.SeatMovieCode AS VoucherNo,
                        B.CustomerName,
                        M.MovieName,
-                       SM.SeatCode,
+                       SM.SeatCode As SeatNumber,
                        ST.Showtime As ShowTime,
                        B.BookingHistory AS BookingTime 
                 FROM Tbl_Booking AS B
@@ -86,7 +83,9 @@ public class DA_Booking
             CustomerName = data.CustomerName,
             MovieName = data.MovieName,
             SeatNumber = data.SeatNumber,
-            Bookingtime = data.Bookingtime
+            ShowTime = data.ShowTime,
+            Bookingtime = data.Bookingtime,
+            ThankYou = "Thank you so much. Have a Good Day."
         };
         return model;
     }
