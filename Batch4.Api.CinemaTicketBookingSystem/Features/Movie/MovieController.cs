@@ -15,10 +15,19 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie
         }
 
         [HttpGet]
-        public IActionResult Read()
+        public async Task<IActionResult> Read()
         {
-            var item = _bL_Movie.GetMovies();
-            return Ok(item);
+            try
+            {
+                var item = await _bL_Movie.GetMovies();
+                if(item is null)
+                    return BadRequest("Moives are Unavaliable");
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
     }
 }

@@ -4,9 +4,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Database;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext()
-    {
-    }
+    
 
     public AppDbContext(DbContextOptions options) : base(options)
     {

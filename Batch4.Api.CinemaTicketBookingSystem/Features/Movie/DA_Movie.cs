@@ -1,21 +1,34 @@
 ﻿using Batch4.Api.CinemaTicketBookingSystem.Database;
 using Batch4.Api.CinemaTicketBookingSystem.Models.MovieModel;
+using Dapper;
+using System.Data;
 
 namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie;
 
 public class DA_Movie
 {
-    private readonly AppDbContext _context;
+    private readonly IDbConnection _connection;
 
-    public DA_Movie(AppDbContext context)
+    public DA_Movie(IDbConnection connection)
     {
-        _context = context;
+        _connection = connection;
     }
 
-    public List<TblMovie> GetMovies()
+    public async Task<MovieList> GetMovies()
     {
-        var list = _context.Movies.ToList();
-        
-        return list;
+        try
+        {
+            string query = "SELECT MovieName, Description FROM Tbl_Movie";
+            var lst = await _connection.QueryAsync<MovieResponseModel>(query);
+            var model = new MovieList()
+            {
+                lst = lst.ToList()
+            };
+            return model;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
     }
 }
