@@ -16,12 +16,19 @@ public class DA_Movie
 
     public async Task<MovieList> GetMovies()
     {
-        string query = "SELECT MovieName, Description FROM Tbl_Movie";
-        var lst = await _connection.QueryAsync<MovieResponseModel>(query);
-        var model = new MovieList()
+        try
         {
-            lst = lst.ToList()
-        };
-        return model;
+            string query = "SELECT MovieName, Description FROM Tbl_Movie";
+            var lst = await _connection.QueryAsync<MovieResponseModel>(query);
+            var model = new MovieList()
+            {
+                lst = lst.ToList()
+            };
+            return model;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
     }
 }

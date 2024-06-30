@@ -20,6 +20,8 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie
             try
             {
                 var item = await _bL_Movie.GetMovies();
+                if(item is null)
+                    return BadRequest("Moives are Unavaliable");
                 return Ok(item);
             }
             catch (Exception ex)
