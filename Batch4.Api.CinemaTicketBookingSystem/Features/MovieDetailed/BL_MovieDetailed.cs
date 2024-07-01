@@ -11,10 +11,19 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
             _dA_MovieDetailed = dA_MovieDetailed;
         }
 
-        public async Task<MovieDetailResponseModel>GetMovieDetail(string movieCode)
+        public async Task<MovieDetailResponseModel> GetMovieDetail(string movieCode)
         {
-            var model = await _dA_MovieDetailed.GetMovieDetail(movieCode);
-            return model;
+            try
+            {
+                var model = await _dA_MovieDetailed.GetMovieDetail(movieCode);
+                if (model is null)
+                    throw new Exception("Movie is null");
+                return model;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
     }
 }

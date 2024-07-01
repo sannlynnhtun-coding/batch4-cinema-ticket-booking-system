@@ -17,8 +17,17 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
         [HttpGet("{movieCode}")]
         public async Task<IActionResult> GetMovieDetailed(string movieCode)
         {
-            var model = await _bL_MovieDetailed.GetMovieDetail(movieCode);
-            return Ok(model);
+            try
+            {
+                var model = await _bL_MovieDetailed.GetMovieDetail(movieCode);
+                if (model is null)
+                    return BadRequest("Model not found");
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
 
     }
