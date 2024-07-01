@@ -2,36 +2,50 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Batch4.Api.CinemaTicketBookingSystem.Features.Booking
+namespace Batch4.Api.CinemaTicketBookingSystem.Features.Booking;
+
+[Route("api/[controller]")]
+[ApiController]
+public class BookingController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class BookingController : ControllerBase
+    private readonly BL_Booking _bL_Booking;
+
+    public BookingController(BL_Booking bL_Booking)
     {
-        private readonly BL_Booking _bL_Booking;
+        _bL_Booking = bL_Booking;
+    }
 
-        public BookingController(BL_Booking bL_Booking)
+    [HttpPost]
+    public async Task<IActionResult> BookingResponse(BookingRequestModel requestModel)
+    {
+        var model = new BookingResponseModel();
+        try
         {
-            _bL_Booking = bL_Booking;
+            model = await _bL_Booking.BookingResponse(requestModel);
+            if (model is null)
+            {
+                return BadRequest("Model is Null");
+            }
+            return Ok(model);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> BookingResponse(BookingRequestModel requestModel)
+        catch (Exception ex)
         {
-            var model = new BookingResponseModel();
-            try
-            {
-                model = await _bL_Booking.BookingResponse(requestModel);
-                if (model is null)
-                {
-                    return BadRequest("Model is Null");
-                }
-                return Ok(model);
-            }
-            catch (Exception ex)
-            {
-               return BadRequest(ex.ToString());
-            }
+            return BadRequest(ex.ToString());
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> BookingSearch(BookingSearchRequestModel reqModel)
+    {
+        var model = new BookingSearchResponseModel();
+        try
+        {
+            model = await _bL_Booking.BookingSearch(reqModel);
+            return Ok(model);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
         }
     }
 }

@@ -3,6 +3,11 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Models.BookingModel;
 
 public class BookingSearchResponseModel
 {
+    List<BookingSearch> lst { get; set; }
+}
+
+public class BookingSearch
+{
     public string CustomerName { get; set; }
     public string MovieName { get; set; }
     public DateTime ShowTime { get; set; }

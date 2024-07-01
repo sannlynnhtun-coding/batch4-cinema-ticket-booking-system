@@ -38,6 +38,14 @@ public class DA_Booking
         return true;
     }
 
+    public async Task<bool> IsExistCustomerName(string CustomerName)
+    {
+        var result = await _context.Customers.Select(x => x.CustomerName == CustomerName).ToListAsync();
+        if (result is null)
+            throw new Exception("Customer Name not found");
+        return true;
+    }
+
     public async Task<string> CreateCustomer(string customerName)
     {
         string query = @"INSERT INTO Tbl_Customer (CustomerName) VALUES (@CustomerName)";
@@ -74,6 +82,7 @@ public class DA_Booking
                 WHERE B.SeatMovieCode = @SeatMovieCode;";
 
             var result = await IsExistSeatMovieCode(reqModel.SeatMovieCode!);
+
             if (!result)
                 throw new Exception("Invalid SeatMovieCode");
             var resutlValidate = await IsValidateMovieCode(reqModel.SeatMovieCode!);
@@ -96,6 +105,47 @@ public class DA_Booking
                 ShowTime = data.ShowTime,
                 Bookingtime = data.Bookingtime,
                 ThankYou = "Thank you so much. Have a Good Day."
+            };
+            return model;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
+    }
+
+    public async Task<List<BookingSearch>> BookingSearchList(BookingSearchRequestModel reqModel)
+    {
+        try
+        {
+            string query = @"
+            SELECT B.CustomerName, M.MovieName, ST.Showtime, SM.SeatCode AS SeatNumber, B.BookingHistory
+            FROM Tbl_Booking AS B 
+            INNER JOIN Tbl_SeatMovie AS SM ON SM.SeatMovieCode = B.SeatMovieCode
+            INNER JOIN Tbl_Movie AS M ON M.MovieCode = SM.MovieCode
+            INNER JOIN Tbl_ShowTime AS ST ON ST.MovieCode = SM.MovieCode
+            WHERE B.CustomerName LIKE '%' + @CustomerName + '%'";
+            var result = await IsExistCustomerName(reqModel.CustomerName);
+            if (!result) throw new Exception("Customer Does Not Exist");
+
+            var data = await _connection.QueryAsync<BookingSearch>(query, new { CustomerName = reqModel.CustomerName });
+            var model = data.ToList();
+            return model;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
+    }
+
+    public async Task<BookingSearchResponseModel> BookingSearch(BookingSearchRequestModel reqModel)
+    {
+        try
+        {
+            var lst = BookingSearchList(reqModel);
+            var model = new BookingSearchResponseModel()
+            {
+                lst = lst
             };
             return model;
         }
