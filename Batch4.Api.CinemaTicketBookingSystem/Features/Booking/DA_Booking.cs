@@ -118,9 +118,8 @@ public class DA_Booking
     {
         try
         {
-            string query = @"
-            SELECT B.CustomerName, M.MovieName, ST.Showtime, SM.SeatCode AS SeatNumber, B.BookingHistory
-            FROM Tbl_Booking AS B 
+            string query = @"SELECT B.CustomerName, M.MovieName, ST.Showtime, 
+            SM.SeatCode AS SeatNumber, B.BookingHistory FROM Tbl_Booking AS B 
             INNER JOIN Tbl_SeatMovie AS SM ON SM.SeatMovieCode = B.SeatMovieCode
             INNER JOIN Tbl_Movie AS M ON M.MovieCode = SM.MovieCode
             INNER JOIN Tbl_ShowTime AS ST ON ST.MovieCode = SM.MovieCode
