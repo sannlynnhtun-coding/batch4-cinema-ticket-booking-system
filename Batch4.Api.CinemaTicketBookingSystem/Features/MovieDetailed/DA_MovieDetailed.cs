@@ -40,7 +40,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
         {
             try
             {
-                string query = @"SELECT M.MovieName, M.Description, ST.MovieTime FROM Tbl_Movie AS M
+                string query = @"SELECT M.MovieName, M.Description, ST.Showtime FROM Tbl_Movie AS M
             JOIN Tbl_ShowTime AS ST ON ST.MovieCode = M.MovieCode
             WHERE M.MovieCode = @MovieCode;";
                 var result = await _dbConnection.QueryAsync<MovieDetailModel>(query, new
@@ -66,7 +66,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
             }
         }
 
-        public async Task<SeatList> SeatList(string movieCode)
+        public async Task<List<Seats>> SeatList(string movieCode)
         {
             try
             {
@@ -76,11 +76,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
                     MovieCode = movieCode
                 });
                 if (result is null) { throw new Exception("Seat Invalid"); }
-                var lst = result.ToList();
-                var model = new SeatList()
-                {
-                    SeatNumber = lst
-                };
+                var model = result.ToList();
                 return model;
             }
             catch (Exception ex)
@@ -89,7 +85,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
             }
         }
 
-        public async Task<AvailableSeatList> AvailableSeatList(string movieCode)
+        public async Task<List<AvailableSeat>> AvailableSeatList(string movieCode)
         {
             try
             {
@@ -99,16 +95,12 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
                     JOIN Tbl_Booking AS B ON B.SeatMovieCode = SM.SeatMovieCode
                     WHERE MovieCode = @MovieCode);";
 
-                var result = await _dbConnection.QueryAsync<Seats>(query, new
+                var result = await _dbConnection.QueryAsync<AvailableSeat>(query, new
                 {
                     MovieCode = movieCode
                 });
                 if (result is null) { throw new Exception("Seat Invalid"); };
-                var lst = result.ToList();
-                var model = new AvailableSeatList()
-                {
-                    AvailableSeatNumber = lst
-                };
+                var model = result.ToList();
                 return model;
             }
             catch(Exception ex)
@@ -123,6 +115,7 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
             {
                 bool result = await IsExistMovieAsync(movieCode);
                 if (!result) throw new Exception("Invalid Movie Code");
+
                 var movieDetail = await MovieDetail(movieCode);
                 var seatList = await SeatList(movieCode);
                 var availableSeatList = await AvailableSeatList(movieCode);
