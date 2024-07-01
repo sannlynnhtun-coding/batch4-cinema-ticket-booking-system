@@ -129,6 +129,8 @@ public class DA_Booking
             if (!result) throw new Exception("Customer Does Not Exist");
 
             var data = await _connection.QueryAsync<BookingSearch>(query, new { CustomerName = reqModel.CustomerName });
+            if (data.Count() == 0)
+                throw new Exception("Customer Name Not Found");
             var model = data.ToList();
             return model;
         }
@@ -142,7 +144,7 @@ public class DA_Booking
     {
         try
         {
-            var lst = BookingSearchList(reqModel);
+            var lst = await BookingSearchList(reqModel);
             var model = new BookingSearchResponseModel()
             {
                 lst = lst

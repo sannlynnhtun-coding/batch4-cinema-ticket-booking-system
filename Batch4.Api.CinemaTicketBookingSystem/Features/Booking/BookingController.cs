@@ -34,7 +34,8 @@ public class BookingController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("BookingSearch")]
+    
     public async Task<IActionResult> BookingSearch(BookingSearchRequestModel reqModel)
     {
         var model = new BookingSearchResponseModel();
@@ -45,7 +46,7 @@ public class BookingController : ControllerBase
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.ToString());
+            return BadRequest(ex.ToString());
         }
     }
 }
