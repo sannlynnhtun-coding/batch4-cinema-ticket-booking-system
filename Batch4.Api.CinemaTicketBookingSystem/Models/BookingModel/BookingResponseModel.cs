@@ -8,8 +8,8 @@ public class BookingResponseModel
     public string VoucherNo { get; set; }
     public string CustomerName { get; set; }
     public string MovieName { get; set; }
-    public string SeatNumber { get; set; }
     public DateTime ShowTime { get; set; }
+    public string SeatNumber { get; set; }
     public DateTime Bookingtime { get; set; }
     public string ThankYou { get; set; }
 }

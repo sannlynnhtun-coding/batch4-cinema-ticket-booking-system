@@ -16,7 +16,7 @@ public class BL_Booking
         var model = new BookingResponseModel();
         try
         {
-           model = await _dA_booking.BookingResponse(reqModel);
+            model = await _dA_booking.BookingResponse(reqModel);
         }
         catch (Exception ex)
         {
@@ -24,5 +24,16 @@ public class BL_Booking
         }
         return model;
     }
-
+    public async Task<BookingSearchResponseModel> BookingSearch(BookingSearchRequestModel reqModel)
+    {
+        try
+        {
+            var model = await _dA_booking.BookingSearch(reqModel);
+            return model;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
+    }
 }

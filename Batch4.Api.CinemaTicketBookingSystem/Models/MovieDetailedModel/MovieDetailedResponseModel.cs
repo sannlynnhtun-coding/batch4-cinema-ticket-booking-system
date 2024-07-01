@@ -1,16 +1,25 @@
-﻿namespace Batch4.Api.CinemaTicketBookingSystem.Models.MovieDetailedModel
+﻿namespace Batch4.Api.CinemaTicketBookingSystem.Models.MovieDetailedModel;
+
+public class MovieDetailResponseModel
 {
-    public class DetailedSeatMovie
-    {
-        public string? SeatMovieCode { get; set; }
-        public string? ShowtimeCode { get; set; }
-        public DateTime MovieTime { get; set; }
-    }
-    public class MovieDetailedResponseModel
-    {
-        public string? MoiveCode { get; set; }
-        public string? MovieName { get; set; }
-        public string? Description { get; set; }
-        public List<DetailedSeatMovie>? SeatMovieList { get; set;}
-    }
+    public MovieDetailModel Movie { get; set; }
+    public List<Seats> SeatNumber { get; set; }
+    public List<AvailableSeat> AvailableSeats { get; set; }
+}
+
+public class MovieDetailModel
+{
+    public string MovieName { get; set; }
+    public string Description { get; set; }
+    public DateTime ShowTime { get; set; }
+}
+
+public class Seats
+{
+    public string SeatCode { get; set; }
+}
+
+public class AvailableSeat
+{
+    public string SeatCode { get; set; }
 }

@@ -14,22 +14,20 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.MovieDetailed
             _bL_MovieDetailed = bL_MovieDetailed;
         }
 
-        [HttpGet]
-        public IActionResult getSeatDetailed()
-        {
-            var item = _bL_MovieDetailed.GetDetailedSeatMovie();
-            return Ok(item);
-        }
-
         [HttpGet("{movieCode}")]
-        public IActionResult GetMovieDetailed(string movieCode)
+        public async Task<IActionResult> GetMovieDetailed(string movieCode)
         {
-            var item = _bL_MovieDetailed.GetMovieDetailed(movieCode);
-            if(item == null)
+            try
             {
-                return NotFound("no data found");
+                var model = await _bL_MovieDetailed.GetMovieDetail(movieCode);
+                if (model is null)
+                    return BadRequest("Model not found");
+                return Ok(model);
             }
-            return Ok(item);
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
 
     }

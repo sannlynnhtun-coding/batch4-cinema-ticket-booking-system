@@ -1,9 +1,8 @@
-﻿using Microsoft.Identity.Client;
-
+﻿using System;
 namespace Batch4.Api.CinemaTicketBookingSystem.Models.BookingModel;
 
-public class BookingRequestModel
+public class BookingSearchRequestModel
 {
-    public string SeatMovieCode { get; set; }
     public string CustomerName { get; set; }
 }
+
