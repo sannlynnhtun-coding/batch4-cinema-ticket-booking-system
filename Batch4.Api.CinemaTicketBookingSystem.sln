@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Batch4.Api.CinemaTicketBook
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{D696ED45-6AFF-4F5D-973E-A8EFF37DD50F}"
 	ProjectSection(SolutionItems) = preProject
-		MiniCinemaBookingSystem.sql = MiniCinemaBookingSystem.sql
+		C:\Users\Mr.Myat Naing Oo\Downloads\MiniCinemaBookingSystem.sql = C:\Users\Mr.Myat Naing Oo\Downloads\MiniCinemaBookingSystem.sql
 	EndProjectSection
 EndProject
 Global

@@ -18,5 +18,20 @@ namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie
             if (movie is null) throw new Exception("Operation Fail");
             return movie;
         }
+        public async Task<int> CreateMovie(TblMovie movie)
+        {
+            var result = await _dA_movie.CreateMovie(movie);
+            return result;
+        }
+        public async Task<int> UpdateMovie(int id,TblMovie movie)
+        {
+            var result = await _dA_movie.UpdateMovie(id, movie);
+            return result;
+        }
+        public async Task<int> DeleteMovie(int id)
+        {
+            var result = await _dA_movie.DeleteMovie(id);
+            return result;
+        }
     }
 }

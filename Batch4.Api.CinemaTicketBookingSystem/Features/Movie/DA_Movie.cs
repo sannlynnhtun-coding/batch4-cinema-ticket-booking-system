@@ -1,6 +1,7 @@
 ﻿using Batch4.Api.CinemaTicketBookingSystem.Database;
 using Batch4.Api.CinemaTicketBookingSystem.Models.MovieModel;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
 namespace Batch4.Api.CinemaTicketBookingSystem.Features.Movie;
@@ -23,5 +24,51 @@ public class DA_Movie
             lst = lst.ToList()
         };
         return model;
+    }
+    public async Task<int> CreateMovie(TblMovie movie)
+    {
+       
+        string query = @"INSERT INTO [dbo].[Tbl_Movie]
+           ([MovieCode]
+           ,[MovieName]
+           ,[Description])
+     VALUES
+           (@MovieCode
+           ,@MovieName
+           ,@Description)";
+
+        var result = await _connection.ExecuteAsync(query,movie);
+        return result;
+    }
+    public async Task<int> UpdateMovie(int id, TblMovie movie)
+    {
+        var item = new TblMovie
+        {
+            MovieId   = id,
+            MovieCode = movie.MovieCode,
+            MovieName = movie.MovieName,
+            Description = movie.Description,
+
+        };
+        string query = @"UPDATE [dbo].[Tbl_Movie]
+   SET [MovieCode] = @MovieCode
+      ,[MovieName] = @MovieName
+      ,[Description] = @Description
+ WHERE MovieId = @MovieId";
+
+        var result = await _connection.ExecuteAsync(query, item);
+        return result;
+    }
+
+    public async Task<int> DeleteMovie(int id)
+    {
+        var item = new TblMovie
+        {
+            MovieId= id,
+        };
+        string query = "DELETE FROM Tbl_Movie WHERE MovieId = @MovieId";
+
+        var result = await _connection.ExecuteAsync(query, item);
+        return result;
     }
 }
