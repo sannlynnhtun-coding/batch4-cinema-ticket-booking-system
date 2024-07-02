@@ -18,21 +18,22 @@ public class DA_Booking
         _connection = connection;
     }
 
-    public async Task<bool> IsExistSeatMovieCode(string seatMovieCode)
+    public async Task<bool> IsExistSeatMovieCode(string MovieCode , string SeatCode)
     {
         var item = await _context.SeatMovies.FirstOrDefaultAsync(x =>
-            x.SeatMovieCode == seatMovieCode
+            x.MovieCode == MovieCode && x.SeatCode == SeatCode
         );
         if (item is null)
             throw new Exception("Invalid SeatMovieCode");
         return true;
     }
 
-    public async Task<bool> IsValidateMovieCode(string seatMovieCode)
+    public async Task<bool> IsValidateMovieCode(string MovieCode, string SeatCode)
     {
-        var item = await _context.Bookings.FirstOrDefaultAsync(x =>
-            x.SeatMovieCode == seatMovieCode
+        var SeatMovieCode = await _context.SeatMovies.FirstOrDefaultAsync(x =>
+            x.MovieCode == MovieCode && x.SeatCode == SeatCode
         );
+        var item = await _context.Bookings.FirstOrDefaultAsync(x => x.SeatMovieCode == SeatMovieCode!.SeatMovieCode);
         if (item is not null)
             throw new Exception("SeatMovie Is Already Taken");
         return true;
