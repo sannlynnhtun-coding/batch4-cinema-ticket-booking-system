@@ -18,22 +18,29 @@ public class DA_Booking
         _connection = connection;
     }
 
-    public async Task<bool> IsExistSeatMovieCode(string MovieCode , string SeatCode)
+    public async Task<bool> IsExistSeatMovieCode(string movieCode, string seatCode)
     {
         var item = await _context.SeatMovies.FirstOrDefaultAsync(x =>
-            x.MovieCode == MovieCode && x.SeatCode == SeatCode
+            x.MovieCode == movieCode && x.SeatCode == seatCode
         );
         if (item is null)
             throw new Exception("Invalid SeatMovieCode");
         return true;
     }
 
-    public async Task<bool> IsValidateMovieCode(string MovieCode, string SeatCode)
+    public async Task<TblSeatMovie> GetSeatMovieCode(string movieCode, string seatCode)
     {
-        var SeatMovieCode = await _context.SeatMovies.FirstOrDefaultAsync(x =>
-            x.MovieCode == MovieCode && x.SeatCode == SeatCode
-        );
-        var item = await _context.Bookings.FirstOrDefaultAsync(x => x.SeatMovieCode == SeatMovieCode!.SeatMovieCode);
+        var SeatMovie = await _context.SeatMovies.FirstOrDefaultAsync(x =>
+        x.MovieCode == movieCode && x.SeatCode == seatCode);
+        if (SeatMovie is null)
+            throw new Exception("SeatMoive Code Doesn't Exist");
+        return SeatMovie;
+    }
+
+    public async Task<bool> IsValidateBooking(string movieCode, string seatCode)
+    {
+        var SeatMovie = await GetSeatMovieCode(movieCode, seatCode);
+        var item = await _context.Bookings.FirstOrDefaultAsync(x => x.SeatMovieCode == SeatMovie!.SeatMovieCode);
         if (item is not null)
             throw new Exception("SeatMovie Is Already Taken");
         return true;
@@ -57,10 +64,11 @@ public class DA_Booking
 
     public async Task<string> CreateBooking(BookingRequestModel reqModel)
     {
+        var seatMovie = await GetSeatMovieCode(reqModel.MovieCode, reqModel.SeatCode);
         await _context.Bookings.AddAsync(
             new TblBooking
             {
-                SeatMovieCode = reqModel.SeatMovieCode!,
+                SeatMovieCode = seatMovie.SeatMovieCode,
                 CustomerName = reqModel.CustomerName,
                 BookingHistory = DateTime.Now,
             }
@@ -72,6 +80,7 @@ public class DA_Booking
 
     public async Task<BookingResponseModel> BookingResponse(BookingRequestModel reqModel)
     {
+        
         try
         {
             var query =
@@ -82,19 +91,21 @@ public class DA_Booking
                 INNER JOIN Tbl_ShowTime AS ST ON ST.MovieCode = M.MovieCode
                 WHERE B.SeatMovieCode = @SeatMovieCode;";
 
-            var result = await IsExistSeatMovieCode(reqModel.SeatMovieCode!);
-
+            var result = await IsExistSeatMovieCode(reqModel.MovieCode, reqModel.SeatCode);
             if (!result)
                 throw new Exception("Invalid SeatMovieCode");
-            var resutlValidate = await IsValidateMovieCode(reqModel.SeatMovieCode!);
+            var resutlValidate = await IsValidateBooking(reqModel.MovieCode, reqModel.SeatCode);
             if (!resutlValidate)
                 throw new Exception("SeatMovie Is Already Taken");
+            var seatMovie = await GetSeatMovieCode(reqModel.MovieCode, reqModel.SeatCode);
+            if (seatMovie is null)
+                throw new Exception("SeatMovieCode is null");
 
             await CreateCustomer(reqModel.CustomerName);
             await CreateBooking(reqModel);
             var item = await _connection.QueryAsync<BookingResponseModel>(
                 query,
-                new { SeatMovieCode = reqModel.SeatMovieCode }
+                new { SeatMovieCode = seatMovie.SeatMovieCode }
             );
             var data = item.FirstOrDefault();
             var model = new BookingResponseModel()
