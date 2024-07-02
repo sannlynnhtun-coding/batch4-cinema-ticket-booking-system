@@ -19,7 +19,7 @@ public class DA_Movie
     {
         try
         {
-            string query = "SELECT MovieName, Description FROM Tbl_Movie";
+            string query = "SELECT MovieCode, MovieName, Description FROM Tbl_Movie";
             var lst = await _connection.QueryAsync<MovieResponseModel>(query);
             var model = new MovieList()
             {
@@ -34,8 +34,9 @@ public class DA_Movie
     }
     public async Task<int> CreateMovie(TblMovie movie)
     {
-       
-        string query = @"INSERT INTO [dbo].[Tbl_Movie]
+        try
+        {
+            string query = @"INSERT INTO [dbo].[Tbl_Movie]
            ([MovieCode]
            ,[MovieName]
            ,[Description])
@@ -44,38 +45,57 @@ public class DA_Movie
            ,@MovieName
            ,@Description)";
 
-        var result = await _connection.ExecuteAsync(query,movie);
-        return result;
+            var result = await _connection.ExecuteAsync(query, movie);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
     }
     public async Task<int> UpdateMovie(int id, TblMovie movie)
     {
-        var item = new TblMovie
+        try
         {
-            MovieId   = id,
-            MovieCode = movie.MovieCode,
-            MovieName = movie.MovieName,
-            Description = movie.Description,
+            var item = new TblMovie
+            {
+                MovieId = id,
+                MovieCode = movie.MovieCode,
+                MovieName = movie.MovieName,
+                Description = movie.Description,
 
-        };
-        string query = @"UPDATE [dbo].[Tbl_Movie]
-   SET [MovieCode] = @MovieCode
-      ,[MovieName] = @MovieName
-      ,[Description] = @Description
- WHERE MovieId = @MovieId";
+            };
+            string query = @"UPDATE [dbo].[Tbl_Movie]
+                       SET [MovieCode] = @MovieCode
+                          ,[MovieName] = @MovieName
+                          ,[Description] = @Description
+                     WHERE MovieId = @MovieId";
 
-        var result = await _connection.ExecuteAsync(query, item);
-        return result;
+            var result = await _connection.ExecuteAsync(query, item);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
     }
 
     public async Task<int> DeleteMovie(int id)
     {
-        var item = new TblMovie
+        try
         {
-            MovieId= id,
-        };
-        string query = "DELETE FROM Tbl_Movie WHERE MovieId = @MovieId";
+            var item = new TblMovie
+            {
+                MovieId = id,
+            };
+            string query = "DELETE FROM Tbl_Movie WHERE MovieId = @MovieId";
 
-        var result = await _connection.ExecuteAsync(query, item);
-        return result;
+            var result = await _connection.ExecuteAsync(query, item);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.ToString());
+        }
     }
 }
